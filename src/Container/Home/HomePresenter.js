@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import WeeklyNotice from "../../Components/HomeComponent/WeeklyNotice";
 
 const Container = styled.div`
   width: 100%;
@@ -35,23 +36,16 @@ const TopContent = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border:1px solid black;
-`;
-
-const WeeklyNotice = styled.div`
-  width: 700px;
-  height: 500px;
   border: 1px solid black;
-  margin: 20px;
 `;
 
 const NoticeList = styled.div`
   width: 500px;
   height: 500px;
   display: flex;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
   justify-content: center;
-  align-items:center;
+  align-items: center;
   border: 1px solid black;
 `;
 
@@ -65,10 +59,11 @@ const BottomContent = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border:1px solid black;
+  border: 1px solid black;
 `;
 
 const HomePresenter = props => {
+  const { loading, documents } = props;
   return (
     <Container>
       <Header>
@@ -78,7 +73,7 @@ const HomePresenter = props => {
       </Header>
       <Content>
         <TopContent>
-          <WeeklyNotice>이번주 공지사항</WeeklyNotice>
+          <WeeklyNotice loading={loading.toString()} documents={documents} />
           <NoticeList>
             <NoticeColumn>성포동</NoticeColumn>
             <NoticeColumn>관리사무소</NoticeColumn>
