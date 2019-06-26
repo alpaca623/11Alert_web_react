@@ -9,7 +9,7 @@ export const requestDocumentsApi = async () => {
 };
 
 export const readDocumentApi = async id => {
-  return await requestApi.get("/documents/read", { params: { _id: id } });
+  return await requestApi.get(`/documents/read/${id}`);
 };
 
 export const createDocumentApi = async data => {
