@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { createDocumentApi } from "../api";
 
 const Container = styled.div`
   width: 100%;
@@ -52,8 +53,10 @@ class WriterView extends React.Component {
   };
 
   handleSubmit = () => {
-    console.log(this.state);
-  }
+    const { title, subTitle, content } = this.state;
+    const data = { title, subTitle, content };
+    createDocumentApi(data);
+  };
   render() {
     return (
       <Container>
@@ -63,15 +66,6 @@ class WriterView extends React.Component {
             name="title"
             size="80"
             placeholder="제목을 입력하세요"
-            onChange={this.handleChange}
-          />
-        </TextContainer>
-        <TextContainer>
-          <TextInput
-            type="text"
-            name="subTitle"
-            size="80"
-            placeholder="부제목을 입력하세요"
             onChange={this.handleChange}
           />
         </TextContainer>
@@ -91,7 +85,7 @@ class WriterView extends React.Component {
         </ContentContainer>
         <BottomPlace>
           <SubmitBtn onClick={this.handleSubmit}>글 작성</SubmitBtn>
-          <CancleBtn onClick={()=>alert('취소!')}>취소</CancleBtn>
+          <CancleBtn onClick={() => alert("취소!")}>취소</CancleBtn>
         </BottomPlace>
       </Container>
     );
