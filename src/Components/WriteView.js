@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { createDocumentApi } from "../api";
+import { createDocumentApi, readDocumentApi } from "../api";
 
 const Container = styled.div`
   width: 100%;
@@ -26,6 +26,8 @@ const TextInput = styled.input`
   margin-bottom: 10px;
 `;
 
+const SelectBox = styled.select``;
+
 const ContentContainer = styled.div``;
 
 const BottomPlace = styled.div``;
@@ -41,23 +43,66 @@ class WriterView extends React.Component {
     this.state = {
       title: "",
       subTitle: "",
-      content: ""
+      content: "",
+      type: "",
+      createAt: ""
     };
   }
 
+  componentDidMount = async () => {
+    const {
+      match: {
+        params: { id }
+      }
+    } = this.props;
+    console.log(id);
+    if (id) {
+      this.readDocument(id);
+    } else {
+      this.setState({
+        title: "",
+        subTitle: "",
+        content: "",
+        type: "",
+        createAt: ""
+      });
+    }
+  };
+
   handleChange = e => {
-    console.log(e.target.name, e.target.value);
     this.setState({
       [e.target.name]: e.target.value
     });
   };
 
   handleSubmit = () => {
-    const { title, subTitle, content } = this.state;
-    const data = { title, subTitle, content };
-    createDocumentApi(data);
+    const { title, subTitle, content, type } = this.state;
+    const data = { title, subTitle, content, type };
+    if (title === "") {
+      alert("제목을 입력해주세요");
+      return;
+    }
+    if (type === "") {
+      alert("문서 종류를 선택해주세요");
+      return;
+    }
+    // console.log(data);
+    try {
+      createDocumentApi(data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  readDocument = async id => {
+    const {
+      data: { _id, title, content, createAt, type }
+    } = await readDocumentApi(id);
+    console.log(_id, title, content, createAt, type);
+    this.setState({ _id, title, content, createAt });
   };
   render() {
+    const { history } = this.props;
     return (
       <Container>
         <TextContainer>
@@ -67,14 +112,21 @@ class WriterView extends React.Component {
             size="80"
             placeholder="제목을 입력하세요"
             onChange={this.handleChange}
+            value={this.state.title !== "" ? this.state.title : ""}
           />
         </TextContainer>
+        <SelectBox name="type" onChange={this.handleChange}>
+          <option>--선택--</option>
+          <option value="1">관리사무소</option>
+          <option value="2">우리주식회사</option>
+        </SelectBox>
         <ContentContainer>
           <CKEditor
             editor={ClassicEditor}
             onInit={editor => {
               // You can store the "editor" and use when it is needed.
               console.log("Editor is ready to use!", editor);
+              // editor.setData();
             }}
             onChange={(event, editor) => {
               this.setState({
@@ -85,7 +137,7 @@ class WriterView extends React.Component {
         </ContentContainer>
         <BottomPlace>
           <SubmitBtn onClick={this.handleSubmit}>글 작성</SubmitBtn>
-          <CancleBtn onClick={() => alert("취소!")}>취소</CancleBtn>
+          <CancleBtn onClick={() => history.goBack()}>취소</CancleBtn>
         </BottomPlace>
       </Container>
     );
