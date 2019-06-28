@@ -1,6 +1,6 @@
 import React from "react";
 import NoticePresenter from "./NoticePresenter";
-import { readDocumentApi } from "../../api";
+import { readDocumentApi, deleteDocumentApi } from "../../api";
 
 class NoticeContainer extends React.Component {
   constructor(props) {
@@ -15,14 +15,13 @@ class NoticeContainer extends React.Component {
   componentDidMount = async () => {
     let document;
     try {
-      // ({data} = await this.requestDocument())
-      console.log(await this.requestDocument());
+      ({ data: document } = await this.requestDocument());
     } catch (e) {
       console.error(e);
     } finally {
       this.setState({
-        loading: false
-        // document
+        loading: false,
+        document
       });
     }
   };
@@ -36,9 +35,23 @@ class NoticeContainer extends React.Component {
     return readDocumentApi(id);
   };
 
+  requestDocumentDelete = async id => {
+    try {
+      await deleteDocumentApi(id);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   render() {
     const { loading, document } = this.state;
-    return <NoticePresenter />;
+    return (
+      <NoticePresenter
+        loading={loading}
+        document={document}
+        requestDocumentDelete={this.requestDocumentDelete}
+      />
+    );
   }
 }
 
