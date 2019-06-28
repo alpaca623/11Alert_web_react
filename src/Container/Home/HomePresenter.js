@@ -1,28 +1,14 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
+
 import WeeklyNotice from "../../Components/HomeComponent/WeeklyNotice";
+import { routes } from "../../routes";
 
 const Container = styled.div`
   width: 100%;
   height: 100%;
 `;
-
-/**
- * Header
- */
-
-const Header = styled.div`
-  display: flex;
-  border: 1px solid black;
-  justify-content: center;
-  align-items: center;
-
-  height: 70px;
-`;
-
-const LeftHeader = styled.div``;
-const CenterHeader = styled.div``;
-const RightHeader = styled.div``;
 
 /**
  * Content
@@ -66,11 +52,6 @@ const HomePresenter = props => {
   const { loading, documents } = props;
   return (
     <Container>
-      <Header>
-        <LeftHeader>left</LeftHeader>
-        <CenterHeader>center</CenterHeader>
-        <RightHeader>right</RightHeader>
-      </Header>
       <Content>
         <TopContent>
           <WeeklyNotice loading={loading.toString()} documents={documents} />
