@@ -15,3 +15,11 @@ export const readDocumentApi = async id => {
 export const createDocumentApi = async data => {
   await requestApi.post("/documents/create", data);
 };
+
+export const updateDocumentApi = async (id, data) => {
+  await requestApi.post("/documents/update", { id, data });
+};
+
+export const deleteDocumentApi = async id => {
+  await requestApi.post("/documents/delete", { id });
+};
